@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Setup Upload Sertifikat</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="sertifikat.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<main class="container py-5" style="max-width:720px">
+  <div class="cert-panel cert-modal">
+    <h1 class="h3 text-white mb-1">Setup Upload Sertifikat</h1>
+    <p class="text-secondary">Halaman ini cuma dipakai sekali untuk membuat <code>sertifikat-config.js</code>. Token yang kamu isi dienkripsi di browser dengan password upload, tidak dikirim ke mana pun.</p>
+    <form id="f" class="d-grid gap-3">
+      <div><label>Username / owner GitHub</label><input class="form-control" id="owner" required placeholder="syauqisyauqi088-png"></div>
+      <div><label>Nama repository</label><input class="form-control" id="repo" required placeholder="web-up"></div>
+      <div><label>Branch</label><input class="form-control" id="branch" value="main" required></div>
+      <div><label>GitHub token (fine-grained, hanya repo ini, izin Contents: Read and write)</label><input class="form-control" id="token" type="password" required placeholder="github_pat_..."></div>
+      <div><label>Password upload</label><input class="form-control" id="pw" value="webgolang123" required></div>
+      <button class="cert-btn justify-content-center" type="submit">Buat sertifikat-config.js</button>
+    </form>
+    <div id="out" class="mt-4" hidden>
+      <p class="text-white mb-2">Selesai. Download file ini, lalu timpa <code>sertifikat-config.js</code> di folder web, commit &amp; push.</p>
+      <textarea class="form-control" id="code" rows="8" readonly></textarea>
+      <button class="cert-btn mt-3" id="dl" type="button">Download sertifikat-config.js</button>
+    </div>
+  </div>
+</main>
+<script>
+const b64 = (u8) => btoa(String.fromCharCode(...u8));
+document.getElementById('f').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const v = (id) => document.getElementById(id).value.trim();
+  const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+  const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(document.getElementById('pw').value), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: 250000, hash: 'SHA-256' }, km, { name: 'AES-GCM', length: 256 }, false, ['encrypt']);
+  const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(v('token'))));
+  const cfg = { owner: v('owner'), repo: v('repo'), branch: v('branch'), salt: b64(salt), iv: b64(iv), token_enc: b64(ct) };
+  const code = '// Dibuat oleh setup-token.html\nwindow.CERT_CONFIG = ' + JSON.stringify(cfg, null, 2) + ';\n';
+  document.getElementById('code').value = code; document.getElementById('out').hidden = false;
+  document.getElementById('dl').onclick = () => {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([code], { type: 'text/javascript' }));
+    a.download = 'sertifikat-config.js'; a.click();
+  };
+});
+</script>
+</body>
+</html>

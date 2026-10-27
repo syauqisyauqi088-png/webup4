@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sertifikat - Kelompok GOLANG</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="sertifikat.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="navbar custom-navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html" aria-label="Beranda">
+        <span class="brand-mark">4</span>
+        <span class="brand-text">GOLANG</span>
+      </a>
+
+      <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0 align-items-lg-center">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="portofolio.html">Portfolio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="sertifikat.html">Sertifikat</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Contacts
+            </a>
+            <ul class="dropdown-menu custom-dropdown">
+              <li><a class="dropdown-item" href="contact.html">Adimas</a></li>
+              <li><a class="dropdown-item" href="contacta.html">Ananda</a></li>
+              <li><a class="dropdown-item" href="contactf.html">Fadya</a></li>
+              <li><a class="dropdown-item" href="contactg.html">Guntur</a></li>
+              <li><a class="dropdown-item" href="contactj.html">Jarvis</a></li>
+              <li><a class="dropdown-item" href="contactm.html">Maysyita</a></li>
+              <li><a class="dropdown-item" href="contacts.html">Syena</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-5 cert-page">
+    <header class="cert-intro">
+      <span class="cert-kicker">GOLANG TEAM</span>
+      <h1>Sertifikat Anggota</h1>
+      <p>Koleksi sertifikat setiap anggota Kelompok GOLANG. Pilih nama untuk melihat sertifikatnya.</p>
+    </header>
+
+    <div class="cert-tabs" id="certTabs" role="group" aria-label="Pilih anggota"></div>
+    <section class="cert-panel" id="certPanel" aria-live="polite"></section>
+  </main>
+
+  <!-- Modal password -->
+  <div class="modal fade cert-modal" id="pwModal" tabindex="-1" aria-labelledby="pwTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <form class="modal-content" id="pwForm" autocomplete="off">
+        <div class="modal-header">
+          <h5 class="modal-title" id="pwTitle">🔒 Masukkan Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <label for="pwInput">Password upload</label>
+          <input type="password" class="form-control" id="pwInput" placeholder="Password" required>
+          <p class="cert-error" id="pwError" role="alert"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="cert-btn ghost" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="cert-btn" id="pwSubmit">Lanjut</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal upload -->
+  <div class="modal fade cert-modal" id="upModal" tabindex="-1" aria-labelledby="upTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <form class="modal-content" id="upForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="upTitle">Upload Sertifikat</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="upPhoto">Foto sertifikat <span class="text-danger">*</span></label>
+            <input type="file" class="form-control" id="upPhoto" accept="image/jpeg,image/png,image/webp,image/gif" required>
+            <div class="hint">JPG, PNG, WEBP, atau GIF — maks 15 MB (otomatis dikecilkan).</div>
+            <img class="cert-preview" id="upPreview" alt="Pratinjau sertifikat">
+          </div>
+          <div>
+            <label for="upDesc">Deskripsi singkat <span class="text-secondary">(opsional)</span></label>
+            <textarea class="form-control" id="upDesc" rows="2" maxlength="200" placeholder="Contoh: Juara 1 Lomba Web Design 2026"></textarea>
+          </div>
+          <p class="cert-error" id="upError" role="alert"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="cert-btn ghost" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="cert-btn" id="upSubmit">Upload</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="modal fade cert-lightbox" id="lightModal" tabindex="-1" aria-label="Pratinjau sertifikat" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" data-bs-dismiss="modal">
+      <div class="modal-content">
+        <img id="lightImg" alt="Sertifikat">
+        <p id="lightDesc"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cert-toast" id="certToast" role="status"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="sertifikat-config.js"></script>
+  <script src="sertifikat.js"></script>
+</body>
+</html>
